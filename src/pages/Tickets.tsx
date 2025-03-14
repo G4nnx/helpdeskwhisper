@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { TicketForm } from '@/components/tickets/TicketForm';
@@ -20,7 +19,7 @@ const mockTickets: Ticket[] = [
   {
     id: 'TIC-1001',
     title: 'Unable to access email',
-    description: 'I cannot login to my email account since this morning. I've tried resetting my password but still getting an error.',
+    description: "I cannot login to my email account since this morning. I've tried resetting my password but still getting an error.",
     status: 'open',
     priority: 'high',
     category: 'account',
