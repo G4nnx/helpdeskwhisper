@@ -115,7 +115,7 @@ export const Sidebar: React.FC = () => {
         <NavItem icon={LayoutDashboard} label="Dashboard" to="/dashboard" collapsed={collapsed} />
         <NavItem icon={Ticket} label="Tickets" to="/tickets" collapsed={collapsed} />
         <NavItem icon={BookText} label="Knowledge Base" to="/knowledge-base" collapsed={collapsed} />
-        <NavItem icon={MessageSquare} label="Live Chat" to="/chat" collapsed={collapsed} />
+        <NavItem icon={MessageSquare} label="Chat Support" to="/chat" collapsed={collapsed} />
         <NavItem icon={BarChart3} label="Reports" to="/reports" collapsed={collapsed} requiredRoles={['admin', 'support']} />
         <NavItem icon={Clock} label="SLA Management" to="/sla" collapsed={collapsed} requiredRoles={['admin', 'support']} />
         <NavItem icon={LaptopIcon} label="Asset Management" to="/assets" collapsed={collapsed} requiredRoles={['admin', 'support']} />

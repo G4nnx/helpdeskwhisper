@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import Tickets from "./pages/Tickets";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import KnowledgeBase from "./pages/KnowledgeBase";
+import Chat from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
@@ -26,8 +28,9 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/tickets" element={<Tickets />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
