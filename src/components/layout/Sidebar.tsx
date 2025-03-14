@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   LogOut,
-  UserCircle
+  UserCircle,
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -25,9 +26,17 @@ type NavItemProps = {
   label: string;
   to: string;
   collapsed: boolean;
+  requiredRoles?: string[];
 };
 
-const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, to, collapsed }) => {
+const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, to, collapsed, requiredRoles = [] }) => {
+  const { hasPermission } = useAuth();
+  
+  // If roles are specified and user doesn't have permission, don't render the item
+  if (requiredRoles.length > 0 && !hasPermission(requiredRoles)) {
+    return null;
+  }
+  
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
@@ -62,6 +71,7 @@ export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
   // Always collapse sidebar on mobile
   React.useEffect(() => {
@@ -72,6 +82,10 @@ export const Sidebar: React.FC = () => {
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
   };
 
   return (
@@ -102,9 +116,9 @@ export const Sidebar: React.FC = () => {
         <NavItem icon={Ticket} label="Tickets" to="/tickets" collapsed={collapsed} />
         <NavItem icon={BookText} label="Knowledge Base" to="/knowledge-base" collapsed={collapsed} />
         <NavItem icon={MessageSquare} label="Live Chat" to="/chat" collapsed={collapsed} />
-        <NavItem icon={BarChart3} label="Reports" to="/reports" collapsed={collapsed} />
-        <NavItem icon={Clock} label="SLA Management" to="/sla" collapsed={collapsed} />
-        <NavItem icon={LaptopIcon} label="Asset Management" to="/assets" collapsed={collapsed} />
+        <NavItem icon={BarChart3} label="Reports" to="/reports" collapsed={collapsed} requiredRoles={['admin', 'support']} />
+        <NavItem icon={Clock} label="SLA Management" to="/sla" collapsed={collapsed} requiredRoles={['admin', 'support']} />
+        <NavItem icon={LaptopIcon} label="Asset Management" to="/assets" collapsed={collapsed} requiredRoles={['admin', 'support']} />
       </div>
 
       {user && (
@@ -114,7 +128,7 @@ export const Sidebar: React.FC = () => {
         )}>
           {!collapsed ? (
             <div className="flex items-center justify-between animate-slide-in-right">
-              <div className="flex items-center">
+              <div className="flex items-center cursor-pointer" onClick={handleProfileClick}>
                 {user.avatar ? (
                   <img
                     src={user.avatar}
@@ -139,23 +153,43 @@ export const Sidebar: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={logout}
-                    className="text-sidebar-foreground hover:bg-sidebar-accent/50"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Logout</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <div className="flex flex-col gap-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleProfileClick}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent/50"
+                    >
+                      <User className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Profile</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={logout}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent/50"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Logout</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           )}
         </div>
       )}
