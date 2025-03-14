@@ -13,6 +13,8 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import KnowledgeBase from "./pages/KnowledgeBase";
 import Chat from "./pages/Chat";
+import Settings from "./pages/Settings";
+import Help from "./pages/Help";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/help" element={<Help />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
